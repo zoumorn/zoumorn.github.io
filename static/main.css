@@ -1,0 +1,13 @@
+.record-header {
+    color: gray;
+}
+
+.record-main-text { 
+    font-size: x-large;
+    word-wrap:break-word; 
+} 
+
+.record-footer {
+    color: gray;
+    word-wrap:break-word;
+}
