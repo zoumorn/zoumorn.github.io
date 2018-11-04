@@ -1,5 +1,4 @@
-//var API_URL = "https://s.eternitywall.cn:38080/s/"
-var API_URL = "http://localhost:8080/s/"
+var API_URL = "https://s.eternitywall.cn:38080/s/"
 
 /*
     "Authorize" : { "fn":Authorize, "auth":0, "params": ["user_id"]},
