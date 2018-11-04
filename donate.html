@@ -11,69 +11,9 @@
         <link rel="stylesheet" href="/static/main.css" />
         <script type="text/javascript" src="/static/jquery-1.12.4.min.js"></script>
         <script type="text/javascript" src="/static/bootstrap.min.js"></script>
-        
-        <script>
-        
-        var payment_method = "alipay";
-        function update_payment() {
-            var alipay_qr = "/static/img/alipay-qr.jpg";
-            var wechatpay_qr = "/static/img/wechatpay-qr.jpg";
-            
-            var qr = $("#payment-qr");
-            if (payment_method == "wechat") {
-                qr.attr('src', wechatpay_qr);
-                $("#tab-wechat").addClass("active");
-                $("#tab-alipay").removeClass("active");
-            }
-            else {
-                qr.attr('src', alipay_qr);
-                $("#tab-alipay").addClass("active");
-                $("#tab-wechat").removeClass("active");
-            }
-        }
-        
-        function show_msg(m) {
-            var d = $("#msg");
-            d.html(m);
-            d.show();
-            setTimeout(function() { d.hide(); }, 2000);
-        }
-
-        $(function(){
-            $("#wechat").click(function(event){
-                payment_method = "wechat";
-                update_payment();
-            });
-            $("#alipay").click(function(event){
-                payment_method = "alipay";
-                update_payment();
-            });
-            
-            $("#donate_form").submit(function(event){
-                var reg = /^[0-9]{6}$/;
-                var donate_id = $("#donate_id").val();
-                if (!reg.test(donate_id)) {
-                    show_msg("请输入正确订单号");
-                    event.preventDefault();
-                }
-                $("#payment_method").val(payment_method);
-            });
-            
-            setInterval(function(){
-                $.ajax({
-                    type: "GET",
-                    url: "https://blockchain.info/ticker",
-                    dataType: "json",
-                    success: function(d) { 
-                        $("#btc_price").html(d.USD.last);
-                    }
-                });
-            }, 2000);
-            
-            update_payment();
-        });
-        </script>
-        
+        <script type="text/javascript" src="/static/js.cookie.js"></script>
+        <script type="text/javascript" src="utils.js"></script>
+        <script type="text/javascript" src="donate.html.js"></script>
     </HEAD>
 
     <BODY>
@@ -110,10 +50,9 @@
                             <p>建议您的捐赠金额为 9、19、99、199 等。</p>
                             <p>
                         </div>
-                        <form id="donate_form" method="post">    
-                            <input id="payment_method" name="method" type="hidden" required />
+                        <form id="donate_form" method="post" style="display:none">
                             <label>填写捐赠订单号后6位，我们将优先审核您的信息：</label>
-                            <p>【】</p>
+                            <p>【<span id="payload"></span>】</p>
                             <div class="input-group">
                                 <input id="donate_id" class="form-control" name="donate_id" type="text" placeholder="捐赠订单号的后6位" value="" maxlength="6" required />
                                 <span class="input-group-btn">
