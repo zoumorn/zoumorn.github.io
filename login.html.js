@@ -7,6 +7,7 @@ function load_captcha() {
 $(function(){
     $("#login_form").submit(function(event){
         event.preventDefault();
+        var user_id = $("#user_id").val();
         var captcha = $("#captcha").val();
         var recaptcha = $("#recaptcha").val(); 
         $.ajax({
