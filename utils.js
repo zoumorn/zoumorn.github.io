@@ -1,4 +1,5 @@
-var API_URL = "https://s.eternitywall.cn:38080/s/"
+var SERVER_ADDR = "https://s.eternitywall.cn:38080";
+var API_URL = SERVER_ADDR+"/s/";
 
 /*
     "Authorize" : { "fn":Authorize, "auth":0, "params": ["user_id"]},

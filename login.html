@@ -23,14 +23,15 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-md-4">
                     <form id="login_form" method="post">    
                         <div class="input-group">
-                                <input id="user_id" class="form-control" name="user_id" type="text" placeholder="电子邮件地址" required />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">确定</button>
-                                </span>
+                            <input id="user_id" class="form-control" name="user_id" type="email" placeholder="电子邮件地址" required autofocus />
+                            <input id="captcha" class="form-control" name="captcha" type="hidden" required />
+                            <input id="recaptcha" class="form-control" name="recaptcha" type="text" maxlength="4" placeholder="验证码" required />
+                            <a id="captcha_click" href="javascript:void(0);"><img id="captcha_img" width="56px" height="22px"></img></a>
                         </div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">确定</button>
                     </form>
                     <div id="msg" class="alert alert-warning" role="alert" style="display:none"></div>
                 </div>
