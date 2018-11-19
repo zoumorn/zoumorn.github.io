@@ -38,10 +38,12 @@ $(function(){
             error: api_error,
             success: function(d) { if (api_success(d)) {
                 var rec = d.result;
-                payment_method = rec.method;
-                $("#donate_id").val(rec.donate_id);
                 $("#payload").html(rec.payload);
-                update_payment();
+                if (rec.method != undefined) {
+                    $("#donate_id").val(rec.donate_id);
+                    payment_method = rec.method;
+                    update_payment();
+                }
             }}
         });
     }
