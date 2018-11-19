@@ -1,4 +1,13 @@
-var payment_method = "alipay";
+var payment_method = "wechat";
+
+var auth = "";
+var user_id = "";
+var rec_id = get_url_param("id", "");
+if (rec_id.length > 0) {
+    auth = authorize_and_redirect();
+    user_id = Cookies.get("user_id");
+}
+
 function update_payment() {
     var alipay_qr = "/static/img/alipay-qr.jpg";
     var wechatpay_qr = "/static/img/wechatpay-qr.jpg";
@@ -17,25 +26,23 @@ function update_payment() {
 }
 
 $(function(){
-    var rec_id = GetUrlParam("id", "");
-    var auth = "";
-    var user_id = "";
+    update_payment();
+
     if (rec_id.length > 0) {
-        auth = AuthorizeRedirect();
-        user_id = Cookies.get("user_id");
         $("#donate_form").show();
         $.ajax({
             type: "POST",
             url: API_URL+"GetRecord",
             data: { rec_id:rec_id, tx:"false" },
             dataType: "json",
-            success: function(d) {
-                if (api_success(d)) {
-                    var rec = d.result;
-                    $("#donate_id").val(rec.donate_id);
-                    $("#payload").html(rec.payload);
-                }
-            }
+            error: api_error,
+            success: function(d) { if (api_success(d)) {
+                var rec = d.result;
+                payment_method = rec.method;
+                $("#donate_id").val(rec.donate_id);
+                $("#payload").html(rec.payload);
+                update_payment();
+            }}
         });
     }
 
@@ -43,11 +50,12 @@ $(function(){
         payment_method = "wechat";
         update_payment();
     });
+
     $("#alipay").click(function(event){
         payment_method = "alipay";
         update_payment();
     });
-    
+
     $("#donate_form").submit(function(event){
         event.preventDefault();
         if (auth.length==0 || user_id.length==0) return;
@@ -64,11 +72,10 @@ $(function(){
             url: API_URL+"UpdateRecordDonation",
             data: { rec_id:rec_id, pay_method:payment_method, donate_id:donate_id },
             dataType: "json",
-            success: function(d) {
-                if (api_success(d)) {
-                    location = GetUrlParam("r", "/");
-                }
-            }
+            error: api_error,
+            success: function(d) { if (api_success(d)) {
+                location = get_url_param("r", "/");
+            }}
         });
     });
     
@@ -82,6 +89,4 @@ $(function(){
             }
         });
     }, 2000);
-    
-    update_payment();
 });
