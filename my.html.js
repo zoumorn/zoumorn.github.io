@@ -49,7 +49,8 @@ $(function(){
     $("#user_id").html(user_id);
     load_all_record();
 
-    $("#txt-payload").keyup(function(e) {
+    var txt_payload = $("#txt-payload");
+    txt_payload.keyup(function(e) {
         var maxchars = max_payload_length;
         var byteslength = get_byte_len($(this).val());
         $("#payload-len").text(maxchars-byteslength);
@@ -57,12 +58,13 @@ $(function(){
 
     $("#btn-send").click(function(event) {
         event.preventDefault();
-        var payload = $("#txt-payload").val();
+        var payload = txt_payload.val();
         var byteslength = get_byte_len(payload);
         if (payload.length <= 0 || byteslength > max_payload_length) {
             show_msg("信息太长无法发布");
             return;
         }
+        txt_payload.focus();
         $.ajax({
             beforeSend: function(xhr){xhr.setRequestHeader("X-Auth", auth);},
             type: "POST",
@@ -72,6 +74,7 @@ $(function(){
             error: api_error,
             success: function(d) { if (api_success(d)) {
                 $("#records").prepend(create_record_div(d.result));
+                txt_payload.val("");
             }}
         });
     });
